@@ -135,7 +135,7 @@ export default function Predict({ result, setResult, formData: sharedData, setFo
       const payload = {};
       FIELDS.forEach(f => payload[f.key] = Number(formData[f.key]));
       
-      const res = await fetch("http://127.0.0.1:8000/predict/", {
+      const res = await fetch("https://cardiopredict-bbzb.onrender.com/predict", {
         method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
       });
       const data = await res.json();
