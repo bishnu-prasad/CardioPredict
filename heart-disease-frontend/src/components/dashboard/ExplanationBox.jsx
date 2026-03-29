@@ -11,23 +11,23 @@ export default function ExplanationBox({ data }) {
   const sugar = Number(data.FastingBS);
 
   // 1. BLOOD PRESSURE
-  if (bp >= 140) insights.push({ color: "#ff6b6b", text: <span><strong>Hypertension detected:</strong> High blood pressure (≥140) contributes to significant heart strain and vascular stress.</span> });
-  else if (bp >= 120) insights.push({ color: "#f5b041", text: <span><strong>Pre-hypertension:</strong> Elevated blood pressure levels (120-139) indicate an early risk factor.</span> });
-  else insights.push({ color: "#22c55e", text: <span><strong>Blood pressure is optimal:</strong> Current levels (&lt;120) are within the medically recommended range.</span> });
+  if (bp >= 140) insights.push({ color: "#ff6b6b", text: <span><strong>High Blood Pressure:</strong> Your blood pressure is elevated, which can strain your heart and arteries.</span> });
+  else if (bp >= 120) insights.push({ color: "#f5b041", text: <span><strong>Slightly Elevated Blood Pressure:</strong> This is an early warning sign and should be monitored.</span> });
+  else insights.push({ color: "#22c55e", text: <span><strong>Healthy Blood Pressure:</strong> Your blood pressure is in a normal, healthy range.</span> });
 
   // 2. CHOLESTEROL
-  if (cholesterol >= 240) insights.push({ color: "#ff6b6b", text: <span><strong>High Cholesterol (≥240):</strong> Significantly increases cardiovascular risk through arterial plaque buildup.</span> });
-  else if (cholesterol >= 200) insights.push({ color: "#f5b041", text: <span><strong>Borderline High Cholesterol:</strong> Levels (200-239) should be monitored to prevent cardiac complications.</span> });
-  else insights.push({ color: "#22c55e", text: <span><strong>Cholesterol is Normal:</strong> Sergio serum levels (&lt;200) maintain good cardiovascular health.</span> });
+  if (cholesterol >= 240) insights.push({ color: "#ff6b6b", text: <span><strong>High Cholesterol:</strong> Elevated cholesterol increases your risk of heart disease.</span> });
+  else if (cholesterol >= 200) insights.push({ color: "#f5b041", text: <span><strong>Borderline Cholesterol:</strong> Your levels are slightly high and should be monitored.</span> });
+  else insights.push({ color: "#22c55e", text: <span><strong>Healthy Cholesterol:</strong> Your cholesterol levels are completely normal.</span> });
 
   // 3. FASTING BLOOD SUGAR
-  if (sugar === 1 || sugar === "1") insights.push({ color: "#ff6b6b", text: <span><strong>Elevated glucose detected:</strong> Fasting sugar &gt;120 mg/dl indicates potential diabetic/metabolic risk.</span> });
-  else insights.push({ color: "#22c55e", text: <span><strong>Glucose levels normal:</strong> Fasting blood sugar is within the target range.</span> });
+  if (sugar === 1 || sugar === "1") insights.push({ color: "#ff6b6b", text: <span><strong>Elevated Blood Sugar:</strong> High blood sugar is a risk factor for heart health.</span> });
+  else insights.push({ color: "#22c55e", text: <span><strong>Normal Blood Sugar:</strong> Your blood sugar levels are healthy.</span> });
 
 
   // 4. MAX HEART RATE (Age-Relative)
   const thr = (220 - age) * 0.6;
-  if (maxHR < thr && maxHR > 0) insights.push({ color: "#f5b041", text: <span><strong>Max Heart Rate concern:</strong> A value lower than age-relative thresholds ({thr.toFixed(0)} bpm) suggests reduced cardiac reserve.</span> });
+  if (maxHR < thr && maxHR > 0) insights.push({ color: "#f5b041", text: <span><strong>Heart Rate Concern:</strong> Your maximum heart rate during exercise is lower than expected for your age.</span> });
 
   // FALLBACK
   const allNormal = bp < 120 && cholesterol < 200 && sugar === 0;
@@ -36,7 +36,7 @@ export default function ExplanationBox({ data }) {
         <div className="explanation-insight-box">
            <div className="explain-item">
               <ShieldCheck size={18} color="#22c55e" />
-              <span className="explain-text"><strong>All major clinical markers are within normal range.</strong> Our AI analysis suggests a high probability of cardiovascular stability based on the provided inputs.</span>
+              <span className="explain-text"><strong>All major factors look great.</strong> Your profile suggests a very healthy cardiovascular system.</span>
            </div>
         </div>
       );
@@ -54,7 +54,7 @@ export default function ExplanationBox({ data }) {
       </div>
       <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-3)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
         <Lightbulb size={14} color="#f5b041" />
-        <span>Clinical Narrative Generation</span>
+        <span>AI Health Analysis</span>
       </div>
     </div>
   );

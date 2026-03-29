@@ -1,5 +1,6 @@
 import React from 'react';
 import { ChevronLeft, RefreshCw, BarChart2, Info, Activity, HeartPulse } from 'lucide-react';
+import { motion } from 'framer-motion';
 import RiskMeter from './RiskMeter';
 import FeatureChart from './FeatureChart';
 import ExplanationBox from './ExplanationBox';
@@ -23,7 +24,12 @@ export default function ResultDashboard({ result, formData, onReset }) {
   }
 
   return (
-    <div className="result-container">
+    <motion.div 
+      className="result-container"
+      initial={{ opacity: 0, y: 30 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.6, ease: "easeOut" }}
+    >
       <div className="dash-header">
         <div className="header-titles">
           <h2 className="dash-title">Comprehensive Cardiac Report</h2>
@@ -65,7 +71,7 @@ export default function ResultDashboard({ result, formData, onReset }) {
             <div className="dash-card explanation-card" style={{ flex: 1 }}>
                 <div className="card-header-simple">
                     <Info size={18} />
-                    <span>Clinical Data Correlation</span>
+                    <span>Why this prediction?</span>
                 </div>
                 <ExplanationBox data={formData} />
             </div>
@@ -93,6 +99,10 @@ export default function ResultDashboard({ result, formData, onReset }) {
           <InputSummary data={formData} />
         </div>
       </div>
-    </div>
+
+      <div className="medical-disclaimer dash-disclaimer" style={{ marginTop: '40px', paddingBottom: '40px', textAlign: 'center', fontSize: '13px', color: 'var(--text-3)' }}>
+        ⚠️ This application is for educational purposes only. The results are not guaranteed and should not be used for medical diagnosis. Always consult a qualified doctor.
+      </div>
+    </motion.div>
   );
 }

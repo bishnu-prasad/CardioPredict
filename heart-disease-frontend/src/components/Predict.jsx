@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
 import { gsap } from "gsap";
 import Tooltip from "./Tooltip"; // ADDED
+import { Loader2, AlertCircle } from "lucide-react";
 
 // ─── Field Config ──────────────────────────────────────
 const FIELDS = [
@@ -85,6 +86,7 @@ export default function Predict({ result, setResult, formData: sharedData, setFo
   const [formData, setLocalData] = useState(sharedData || EMPTY_FORM);
   const [errors, setErrors]     = useState({});
   const [loading, setLoading]   = useState(false);
+  const [errorMsg, setErrorMsg] = useState("");
   const formRef = React.useRef(null);
   const navigate = useNavigate();
 
@@ -148,7 +150,8 @@ export default function Predict({ result, setResult, formData: sharedData, setFo
       setResult(data);
       navigate("/dashboard");
     } catch (err) {
-      alert("Error reaching backend. Is the backend service running?");
+      setErrorMsg("Unable to reach server. Please try again.");
+      setTimeout(() => setErrorMsg(""), 5000);
     } finally {
       setLoading(false);
     }
@@ -166,13 +169,33 @@ export default function Predict({ result, setResult, formData: sharedData, setFo
               <div ref={formRef} className="form-grid">
                 {FIELDS.map((field) => <FormField key={field.key} field={field} value={formData[field.key]} onChange={handleChange} error={errors[field.key]} />)}
               </div>
-              <button type="submit" className="submit-btn" disabled={loading || !isFormValid}>
-                {loading ? "Analyzing Models..." : "Generate Prediction"}
+              <button type="submit" className="submit-btn" disabled={loading || !isFormValid} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
+                {loading && <Loader2 className="animate-spin" size={18} />}
+                {loading ? "Analyzing..." : "Generate Prediction"}
               </button>
             </div>
           </form>
         </div>
+        
+        <div className="medical-disclaimer" style={{ marginTop: '30px', textAlign: 'center', fontSize: '13px', color: 'var(--text-3)', padding: '0 20px' }}>
+          ⚠️ This application is for educational purposes only. The results are not guaranteed and should not be used for medical diagnosis. Always consult a qualified doctor.
+        </div>
       </section>
+
+      {/* Error Toast */}
+      <AnimatePresence>
+        {errorMsg && (
+          <motion.div 
+            className="error-toast"
+            initial={{ opacity: 0, y: 50, x: '-50%' }}
+            animate={{ opacity: 1, y: 0, x: '-50%' }}
+            exit={{ opacity: 0, y: 50, x: '-50%' }}
+          >
+            <AlertCircle size={18} />
+            {errorMsg}
+          </motion.div>
+        )}
+      </AnimatePresence>
 
       <AnimatePresence mode="wait">
         {loading && (
