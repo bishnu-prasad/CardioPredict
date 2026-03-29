@@ -1,5 +1,5 @@
 import React from 'react';
-import { Lightbulb, ChevronRight, Ban, Activity, ShieldCheck, Heart } from 'lucide-react';
+import { Lightbulb, ChevronRight, ShieldCheck } from 'lucide-react';
 
 export default function ExplanationBox({ data }) {
   const insights = [];

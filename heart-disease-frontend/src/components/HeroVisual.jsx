@@ -1,6 +1,6 @@
 import React from 'react';
 import { motion } from 'framer-motion';
-import { HeartPulse, Activity, Zap, ShieldCheck, BrainCircuit } from 'lucide-react';
+import { HeartPulse, Activity, ShieldCheck, BrainCircuit } from 'lucide-react';
 
 export default function HeroVisual() {
   return (
