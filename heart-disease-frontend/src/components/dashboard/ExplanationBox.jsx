@@ -1,60 +1,96 @@
 import React from 'react';
-import { Lightbulb, ChevronRight, ShieldCheck } from 'lucide-react';
+import { Lightbulb, CheckCircle2 } from 'lucide-react';
 
 export default function ExplanationBox({ data }) {
   const insights = [];
-  
-  const age = Number(data.Age);
-  const cholesterol = Number(data.Cholesterol);
+
   const bp = Number(data.RestingBP);
-  const maxHR = Number(data.MaxHR);
+  const cholesterol = Number(data.Cholesterol);
   const sugar = Number(data.FastingBS);
 
-  // 1. BLOOD PRESSURE
-  if (bp >= 140) insights.push({ color: "#ff6b6b", text: <span><strong>High Blood Pressure:</strong> Your blood pressure is elevated, which can strain your heart and arteries.</span> });
-  else if (bp >= 120) insights.push({ color: "#f5b041", text: <span><strong>Slightly Elevated Blood Pressure:</strong> This is an early warning sign and should be monitored.</span> });
-  else insights.push({ color: "#22c55e", text: <span><strong>Healthy Blood Pressure:</strong> Your blood pressure is in a normal, healthy range.</span> });
+  if (bp >= 140)
+    insights.push({
+      color: '#E10600',
+      label: 'High BP',
+      text: 'Elevated blood pressure strains your cardiovascular system.',
+    });
+  else if (bp >= 120)
+    insights.push({
+      color: '#E10600',
+      opacity: 0.85,
+      label: 'Elevated BP',
+      text: 'Pre-hypertension levels detected; monitoring recommended.',
+    });
+  else
+    insights.push({
+      color: '#15803d',
+      label: 'Normal BP',
+      text: 'Resting blood pressure is within the optimal range.',
+    });
 
-  // 2. CHOLESTEROL
-  if (cholesterol >= 240) insights.push({ color: "#ff6b6b", text: <span><strong>High Cholesterol:</strong> Elevated cholesterol increases your risk of heart disease.</span> });
-  else if (cholesterol >= 200) insights.push({ color: "#f5b041", text: <span><strong>Borderline Cholesterol:</strong> Your levels are slightly high and should be monitored.</span> });
-  else insights.push({ color: "#22c55e", text: <span><strong>Healthy Cholesterol:</strong> Your cholesterol levels are completely normal.</span> });
+  if (cholesterol >= 240)
+    insights.push({
+      color: '#E10600',
+      label: 'High cholesterol',
+      text: 'High serum cholesterol is a primary risk factor for heart disease.',
+    });
+  else if (cholesterol >= 200)
+    insights.push({
+      color: '#E10600',
+      opacity: 0.85,
+      label: 'Borderline',
+      text: 'Cholesterol levels are at the upper limit of normal.',
+    });
+  else
+    insights.push({
+      color: '#15803d',
+      label: 'Healthy cholesterol',
+      text: 'Your cholesterol profile looks favorable.',
+    });
 
-  // 3. FASTING BLOOD SUGAR
-  if (sugar === 1 || sugar === "1") insights.push({ color: "#ff6b6b", text: <span><strong>Elevated Blood Sugar:</strong> High blood sugar is a risk factor for heart health.</span> });
-  else insights.push({ color: "#22c55e", text: <span><strong>Normal Blood Sugar:</strong> Your blood sugar levels are healthy.</span> });
-
-
-  // 4. MAX HEART RATE (Age-Relative)
-  const thr = (220 - age) * 0.6;
-  if (maxHR < thr && maxHR > 0) insights.push({ color: "#f5b041", text: <span><strong>Heart Rate Concern:</strong> Your maximum heart rate during exercise is lower than expected for your age.</span> });
-
-  // FALLBACK
-  const allNormal = bp < 120 && cholesterol < 200 && sugar === 0;
-  if (allNormal && insights.length === 3) {
-      return (
-        <div className="explanation-insight-box">
-           <div className="explain-item">
-              <ShieldCheck size={18} color="#22c55e" />
-              <span className="explain-text"><strong>All major factors look great.</strong> Your profile suggests a very healthy cardiovascular system.</span>
-           </div>
-        </div>
-      );
-  }
+  if (sugar === 1 || sugar === '1')
+    insights.push({
+      color: '#E10600',
+      label: 'Elevated glucose',
+      text: 'High fasting blood sugar indicates metabolic concerns.',
+    });
+  else
+    insights.push({
+      color: '#15803d',
+      label: 'Normal glucose',
+      text: 'Fasting blood sugar is within range.',
+    });
 
   return (
-    <div className="explanation-insight-box">
-      <div className="explanation-list">
+    <div className="flex flex-col gap-4">
+      <ul className="divide-y divide-line border-t border-b border-line">
         {insights.map((ins, i) => (
-          <div key={i} className="explain-item">
-            <div style={{ marginTop: '3px' }}><ChevronRight size={16} color={ins.color} strokeWidth={3} /></div>
-            <span className="explain-text">{ins.text}</span>
-          </div>
+          <li key={i} className="py-6 flex gap-4">
+            <div
+              className="mt-1.5 h-1.5 w-1.5 shrink-0 rounded-full"
+              style={{ backgroundColor: ins.color, opacity: ins.opacity ?? 1 }}
+            />
+            <div className="min-w-0">
+              <span
+                className="text-sm md:text-base font-semibold uppercase tracking-widest block mb-1"
+                style={{ color: ins.color, opacity: ins.opacity ?? 1 }}
+              >
+                {ins.label}
+              </span>
+              <p className="text-base md:text-lg text-ink/90 leading-relaxed">{ins.text}</p>
+            </div>
+          </li>
         ))}
-      </div>
-      <div style={{ marginTop: '20px', display: 'flex', alignItems: 'center', gap: '8px', color: 'var(--text-3)', fontSize: '11px', fontWeight: 700, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
-        <Lightbulb size={14} color="#f5b041" />
-        <span>AI Health Analysis</span>
+      </ul>
+
+      <div className="mt-8 flex items-center justify-between text-muted">
+        <div className="flex items-center gap-2">
+          <div className="w-8 h-8 border border-line flex items-center justify-center">
+            <Lightbulb size={14} className="text-accent" strokeWidth={2} />
+          </div>
+          <span className="text-sm md:text-base font-semibold uppercase tracking-widest">Clinical notes</span>
+        </div>
+        <CheckCircle2 size={16} className="text-line" strokeWidth={2} />
       </div>
     </div>
   );

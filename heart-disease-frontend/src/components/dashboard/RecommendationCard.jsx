@@ -1,44 +1,47 @@
 import React from 'react';
-import { Stethoscope, HeartPulse, AlertTriangle, CheckCircle } from 'lucide-react';
+import { Stethoscope, HeartPulse, AlertTriangle, CheckCircle, ArrowRight } from 'lucide-react';
 
-export default function RecommendationCard({ riskLevel, colorClass }) {
+export default function RecommendationCard({ riskLevel }) {
+  const red = '#E10600';
+  const green = '#15803d';
+
   const getContent = () => {
     switch (riskLevel) {
-      case "High Risk":
+      case 'High Risk':
         return {
-          icon: <AlertTriangle size={24} color="#ff6b6b" />,
-          bgColor: "rgba(255, 107, 107, 0.08)",
-          borderColor: "rgba(255, 107, 107, 0.2)",
-          title: "Urgent Medical Consultation Recommended",
+          icon: <AlertTriangle size={22} style={{ color: red }} strokeWidth={2} />,
+          border: 'border-line',
+          title: 'Immediate cardiovascular consultation',
+          subtitle: 'Urgent actions',
           items: [
-            "Strongly recommend consulting a cardiologist immediately",
-            "Immediate lifestyle and dietary changes required",
-            "Further diagnostic tests (ECG, Stress Test) suggested"
-          ]
+            'Consult a board-certified cardiologist promptly.',
+            'Monitor blood pressure and lipids closely.',
+            'Discuss stress testing or ECG with your clinician.',
+          ],
         };
-      case "Moderate Risk":
+      case 'Moderate Risk':
         return {
-          icon: <HeartPulse size={24} color="#f5b041" />,
-          bgColor: "rgba(245, 176, 65, 0.08)",
-          borderColor: "rgba(245, 176, 65, 0.2)",
-          title: "Proactive Health Monitoring Suggested",
+          icon: <HeartPulse size={22} style={{ color: red }} strokeWidth={2} />,
+          border: 'border-line',
+          title: 'Proactive health steps',
+          subtitle: 'Prevention focus',
           items: [
-            "Closely monitor blood pressure and sugar levels",
-            "Consult a healthcare professional if any symptoms appear",
-            "Review dietary habits and increase moderate physical activity"
-          ]
+            'Schedule a routine check-up with your provider.',
+            'Adopt heart-healthy nutrition patterns.',
+            'Aim for at least 150 minutes of moderate activity per week.',
+          ],
         };
       default:
         return {
-          icon: <CheckCircle size={24} color="#22c55e" />,
-          bgColor: "rgba(34, 197, 94, 0.08)",
-          borderColor: "rgba(34, 197, 94, 0.2)",
-          title: "Maintain Current Healthy Trajectory",
+          icon: <CheckCircle size={22} style={{ color: green }} strokeWidth={2} />,
+          border: 'border-line',
+          title: 'Maintain your trajectory',
+          subtitle: 'Favorable profile',
           items: [
-            "Continue maintaining a healthy, active lifestyle",
-            "Ensure a balanced diet rich in heart-healthy nutrients",
-            "Regular annual checkups are recommended for baseline monitoring"
-          ]
+            'Keep current activity and nutrition habits.',
+            'Continue annual cardiovascular screening.',
+            'Watch for new symptoms and report changes.',
+          ],
         };
     }
   };
@@ -46,42 +49,31 @@ export default function RecommendationCard({ riskLevel, colorClass }) {
   const content = getContent();
 
   return (
-    <div className={`dash-card reco-card reco-${colorClass}`} style={{ 
-      background: content.bgColor, 
-      border: `1px solid ${content.borderColor}`,
-      display: 'flex',
-      flexDirection: 'column',
-      gap: '16px'
-    }}>
-      <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
-        <div style={{ 
-          background: 'rgba(255, 255, 255, 0.1)', 
-          padding: '10px', 
-          borderRadius: '12px', 
-          display: 'flex', 
-          alignItems: 'center', 
-          justifyContent: 'center' 
-        }}>
+    <div className={`border ${content.border} bg-white p-8 md:p-10`}>
+      <div className="flex items-start gap-5 mb-8 pb-8 border-b border-line">
+        <div className="w-12 h-12 border border-line flex items-center justify-center shrink-0 bg-cream">
           {content.icon}
         </div>
         <div>
-          <h4 style={{ margin: 0, fontSize: '15px', fontWeight: 700, color: 'var(--text-1)' }}>{content.title}</h4>
-          <span style={{ fontSize: '12px', color: 'var(--text-3)', fontWeight: 600, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Professional Guidance</span>
+          <h4 className="text-xl font-black text-ink tracking-tight">{content.title}</h4>
+          <span className="text-[10px] font-semibold uppercase tracking-[0.2em] text-muted">{content.subtitle}</span>
         </div>
       </div>
-      
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {content.items.map((item, index) => (
-          <div key={index} style={{ display: 'flex', gap: '10px', alignItems: 'flex-start' }}>
-            <div style={{ marginTop: '6px', width: '6px', height: '6px', borderRadius: '50%', background: 'var(--text-3)', flexShrink: 0 }} />
-            <p style={{ margin: 0, fontSize: '13.5px', color: 'var(--text-2)', lineHeight: '1.5' }}>{item}</p>
-          </div>
-        ))}
-      </div>
 
-      <div style={{ marginTop: '8px', padding: '10px 14px', background: 'rgba(255,255,255,0.05)', borderRadius: '10px', display: 'flex', alignItems: 'center', gap: '8px' }}>
-        <Stethoscope size={14} color="var(--text-3)" />
-        <span style={{ fontSize: '11px', color: 'var(--text-3)', fontWeight: 600 }}>Disclaimer: This is an AI assessment. Consult a doctor for clinical diagnosis.</span>
+      <ul className="space-y-0 divide-y divide-line border-t border-b border-line mb-8">
+        {content.items.map((item, index) => (
+          <li key={index} className="py-4 text-sm text-ink/80 leading-relaxed">
+            {item}
+          </li>
+        ))}
+      </ul>
+
+      <div className="flex items-center justify-between text-muted">
+        <div className="flex items-center gap-2">
+          <Stethoscope size={14} strokeWidth={2} />
+          <span className="text-[10px] font-semibold uppercase tracking-widest">Guidance</span>
+        </div>
+        <ArrowRight size={14} strokeWidth={2} className="opacity-30" />
       </div>
     </div>
   );

@@ -1,129 +1,23 @@
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap");
 
-/* ── Design tokens: Light (default) ──────── */
-:root {
-  --bg:            #BDDDFC; /* Pastel blue background */
-  --bg2:           #A8D0FB;
-  --card:          rgba(255, 255, 255, 0.75);
-  --card-solid:    #ffffff;
-  --input-bg:      rgba(255, 255, 255, 0.85);
-  --border:        rgba(106, 137, 167, 0.4); /* #6A89A7 with opacity */
-  --border-focus:  #88BDF2;
-  --text-1:        #384959; /* Dark accent */
-  --text-2:        rgba(56, 73, 89, 0.8);
-  --text-3:        rgba(56, 73, 89, 0.6);
-  --accent:        #6A89A7; /* Primary */
-  --accent2:       #88BDF2; /* Secondary */
-  --accent3:       #6A89A7;
-  --btn-glow:      rgba(106, 137, 167, 0.3);
-  --nav-bg:        rgba(255, 255, 255, 0.5);
-  --nav-border:    rgba(106, 137, 167, 0.15);
-  --blob1:         rgba(106, 137, 167, 0.2);
-  --blob2:         rgba(136, 189, 242, 0.2);
-  --blob3:         rgba(189, 223, 252, 0.4);
-  --progress-bg:   rgba(136, 189, 242, 0.25);
-  --footer-text:   rgba(56, 73, 89, 0.7);
-  --divider:       rgba(106, 137, 167, 0.2);
-  --shadow:        0 8px 32px rgba(56, 73, 89, 0.08);
-  --shadow-hover:  0 20px 56px rgba(56, 73, 89, 0.14);
-  --select-arrow:  #6A89A7;
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+html {
+  background-color: #efede6;
 }
 
-/* ── Design tokens: Dark ─────────────────── */
-[data-theme="dark"] {
-  --bg:            #111827; /* Rich dark theme bg */
-  --bg2:           #1F2937;
-  --card:          rgba(17, 24, 39, 0.7);
-  --card-solid:    #111827;
-  --input-bg:      #1F2937;
-  --border:        rgba(255, 255, 255, 0.1);
-  --border-focus:  #88BDF2;
-  --text-1:        #E5E7EB; /* Primary text */
-  --text-2:        #9CA3AF; /* Secondary text */
-  --text-3:        #6B7280; /* Placeholder text */
-  --accent:        #88BDF2;
-  --accent2:       #6A89A7;
-  --accent3:       #BDDDCF;
-  --btn-glow:      rgba(136, 189, 242, 0.4);
-  --nav-bg:        rgba(17, 24, 39, 0.8);
-  --nav-border:    rgba(255, 255, 255, 0.1);
-  --blob1:         rgba(136, 189, 242, 0.15);
-  --blob2:         rgba(106, 137, 167, 0.15);
-  --blob3:         rgba(189, 223, 252, 0.1);
-  --progress-bg:   rgba(255, 255, 255, 0.1);
-  --footer-text:   #9CA3AF;
-  --divider:       rgba(255, 255, 255, 0.1);
-  --shadow:        0 8px 32px rgba(0, 0, 0, 0.4);
-  --shadow-hover:  0 20px 56px rgba(0, 0, 0, 0.6);
-  --select-arrow:  #88BDF2;
-}
-
-/* ── Base reset ──────────────────────────── */
-*,*::before,*::after { box-sizing: border-box; margin: 0; padding: 0; }
-html { scroll-behavior: smooth; }
 body {
-  font-family: 'Inter', system-ui, -apple-system, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  background: var(--bg);
-  color: var(--text-1);
+  margin: 0;
   min-height: 100vh;
-  transition: background 0.4s ease, color 0.4s ease;
-  overflow-x: hidden;
-}
-::-webkit-scrollbar { width: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-
-/* Custom Error Toast */
-.error-toast {
-  position: fixed;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: #ff6b6b;
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-weight: 500;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  box-shadow: 0 10px 25px rgba(255, 107, 107, 0.4);
-  z-index: 9999;
+  background-color: #efede6;
+  color: #000000;
+  font-family: Inter, system-ui, -apple-system, Segoe UI, sans-serif;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Spinner Animation */
-@keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-.animate-spin {
-  animation: spin 1s linear infinite;
-}
-
-/* Button UI Polish */
-.submit-btn {
-  transition: all 0.3s ease;
-  border-radius: 12px;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
-}
-.submit-btn:hover:not(:disabled) {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(106, 137, 167, 0.4); 
-}
-.submit-btn:active:not(:disabled) {
-  transform: translateY(1px);
-}
-.submit-btn:disabled {
-  opacity: 0.7;
-  cursor: not-allowed;
-}
-
-/* Better Card Spacing */
-.dash-card {
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-.dash-card:hover {
-  transform: translateY(-2px);
-  box-shadow: var(--shadow-hover);
+#root {
+  min-height: 100vh;
+  background-color: #efede6;
 }

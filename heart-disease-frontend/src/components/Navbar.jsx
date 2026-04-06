@@ -1,35 +1,71 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { NavLink, Link } from 'react-router-dom';
-import gsap from 'gsap';
+import { motion } from 'framer-motion';
 
-export default function Navbar({ isDark, setIsDark }) {
-  const navRef = useRef(null);
+const linkClass = ({ isActive }) =>
+  `relative pb-1 text-sm font-semibold uppercase tracking-widest transition-all duration-300 ease-in-out ${
+    isActive
+      ? 'text-black after:absolute after:left-0 after:right-0 after:-bottom-0.5 after:h-0.5 after:bg-[#E10600]'
+      : 'text-[#6B6B6B] hover:text-black'
+  }`;
 
-  useEffect(() => {
-    gsap.fromTo(navRef.current,
-      { y: -80, opacity: 0 },
-      { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }
-    );
-  }, []);
-
+export default function Navbar() {
   return (
-    <nav ref={navRef} className="navbar" style={{ position: 'sticky', top: 0, zIndex: 100 }}>
-      <div className="nav-inner">
-        <Link to="/" className="nav-logo">
-          <span className="nav-logo-text" style={{ fontSize: '20px' }}>CardioPredict </span>
-        </Link>
-        <div className="nav-links">
-          <NavLink to="/" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Home</NavLink>
-          <NavLink to="/predict" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Predict</NavLink>
-          <NavLink to="/dashboard" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Dashboard</NavLink>
-          <NavLink to="/learn" className={({ isActive }) => `nav-link ${isActive ? 'active' : ''}`}>Learn</NavLink>
+    <motion.nav
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.35 }}
+      className="sticky top-0 z-50 w-full border-b border-[#E5E5E5] bg-white"
+    >
+      <div className="max-w-[1200px] mx-auto px-6">
+        <div className="flex md:grid md:grid-cols-[1fr_auto_1fr] items-center h-16 md:h-20 gap-4">
+          <Link to="/" className="flex items-center gap-2 justify-self-start min-w-0">
+            <span className="font-black text-xl md:text-2xl text-black tracking-tight truncate">CardioPredict</span>
+          </Link>
+
+          <nav className="hidden md:flex items-center justify-center gap-10 lg:gap-12">
+            <NavLink to="/" className={linkClass}>
+              Home
+            </NavLink>
+            <NavLink to="/predict" className={linkClass}>
+              Predict
+            </NavLink>
+            <NavLink to="/dashboard" className={linkClass}>
+              Dashboard
+            </NavLink>
+            <NavLink to="/learn" className={linkClass}>
+              Learn
+            </NavLink>
+          </nav>
+
+          <div className="flex items-center justify-end flex-1 md:flex-none md:justify-self-end">
+            <Link
+              to="/predict"
+              className="inline-flex items-center justify-center bg-[#E10600] text-white px-5 py-2.5 md:px-6 rounded-full font-semibold text-[10px] md:text-xs uppercase tracking-widest transition-all duration-300 ease-in-out hover:bg-[#c70500] hover:scale-105 active:scale-100"
+            >
+              Analyze Now
+            </Link>
+          </div>
         </div>
-        <div className="nav-right">
-          <button className="theme-btn" onClick={() => setIsDark(!isDark)}>
-            {isDark ? "☀️" : "🌙"}
-          </button>
-        </div>
+
+        <nav
+          className="md:hidden flex flex-wrap justify-center gap-x-6 gap-y-2 pt-4 border-t border-[#E5E5E5] -mx-6 px-6 pb-4"
+          aria-label="Primary"
+        >
+          <NavLink to="/" className={linkClass}>
+            Home
+          </NavLink>
+          <NavLink to="/predict" className={linkClass}>
+            Predict
+          </NavLink>
+          <NavLink to="/dashboard" className={linkClass}>
+            Dashboard
+          </NavLink>
+          <NavLink to="/learn" className={linkClass}>
+            Learn
+          </NavLink>
+        </nav>
       </div>
-    </nav>
+    </motion.nav>
   );
 }

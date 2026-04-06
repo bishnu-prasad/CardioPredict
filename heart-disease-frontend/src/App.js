@@ -6,7 +6,7 @@ import "./App.css";
 import Navbar from "./components/Navbar";
 import Landing from "./components/Landing";
 import Predict from "./components/Predict";
-import Dashboard from "./components/Dashboard"; // NEW
+import Dashboard from "./components/Dashboard";
 import Learn from "./components/Learn";
 import Footer from "./components/Footer";
 
@@ -28,64 +28,60 @@ function ScrollToTop() {
   return null;
 }
 
-// Wrapper for AnimatePresence
-function AnimatedRoutes({ isDark, setIsDark }) {
+function MainLayout() {
   const location = useLocation();
   const [result, setResult] = useState(null);
   const [formData, setFormData] = useState(null);
   
   return (
-    <div className="page">
+    <div className="relative min-h-screen flex flex-col items-center bg-cream text-ink">
       <ScrollToTop />
-      <div className="blobs">
-        <div className="blob blob-1" />
-        <div className="blob blob-2" />
-        <div className="blob blob-3" />
-      </div>
 
-      <div className="layer">
-        <Navbar isDark={isDark} setIsDark={setIsDark} />
-        
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', width: '100%', minHeight: 'calc(100vh - 64px)' }}>
-          <Routes location={location} key={location.pathname}>
-            <Route path="/" element={<Landing />} />
-            <Route 
-              path="/predict" 
-              element={<Predict result={result} setResult={setResult} formData={formData} setFormData={setFormData} />} 
-            />
-            <Route 
-              path="/dashboard" 
-              element={<Dashboard result={result} formData={formData} setResult={setResult} />} 
-            />
-            <Route path="/learn" element={<Learn />} />
-          </Routes>
-        </div>
+      <Navbar />
+      
+      <main className="w-full relative z-10 flex flex-col items-center flex-1">
+        <Routes location={location} key={location.pathname}>
+          <Route path="/" element={<Landing />} />
+          <Route 
+            path="/predict" 
+            element={<Predict result={result} setResult={setResult} formData={formData} setFormData={setFormData} />} 
+          />
+          <Route 
+            path="/dashboard" 
+            element={<Dashboard result={result} formData={formData} setResult={setResult} />} 
+          />
+          <Route path="/learn" element={<Learn />} />
+        </Routes>
+      </main>
 
-        <Footer />
-      </div>
+      <Footer />
     </div>
   );
 }
 
 export default function App() {
-  const [isDark, setIsDark] = useState(false);
-
-  // Lenis Smooth Scroll
+  // Lenis Smooth Scroll Initialization
   useEffect(() => {
-    const lenis = new Lenis({ lerp: 0.08 });
-    function raf(time) { lenis.raf(time); requestAnimationFrame(raf); }
+    const lenis = new Lenis({ 
+      lerp: 0.1,
+      smoothWheel: true,
+      wheelMultiplier: 1,
+      touchMultiplier: 2,
+    });
+    
+    function raf(time) {
+      lenis.raf(time);
+      requestAnimationFrame(raf);
+    }
+    
     requestAnimationFrame(raf);
+    
     return () => lenis.destroy();
   }, []);
 
-  // Theme apply
-  useEffect(() => {
-    document.documentElement.setAttribute("data-theme", isDark ? "dark" : "light");
-  }, [isDark]);
-
   return (
     <Router>
-      <AnimatedRoutes isDark={isDark} setIsDark={setIsDark} />
+      <MainLayout />
     </Router>
   );
 }

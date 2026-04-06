@@ -1,11 +1,9 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { motion, AnimatePresence } from "framer-motion";
-import { gsap } from "gsap";
-import Tooltip from "./Tooltip"; // ADDED
-import { Loader2, AlertCircle } from "lucide-react";
+import { Loader2, AlertCircle, ArrowLeft, Info } from "lucide-react";
+import Tooltip from "./Tooltip";
 
-// ─── Field Config ──────────────────────────────────────
 const FIELDS = [
   { key: "Age",            label: "Age",                        type: "number", placeholder: "e.g. 52 (1–120)",     hint: "Years", min: 1, max: 120 },
   { key: "Sex",            label: "Biological Sex",             type: "select",
@@ -36,49 +34,62 @@ const FIELDS = [
 const EMPTY_FORM = FIELDS.reduce((acc, f) => ({ ...acc, [f.key]: "" }), {});
 
 function FormField({ field, value, onChange, error }) {
-  const labelWithTooltip = field.tooltip ? (
-    <Tooltip text={field.tooltip}>{field.label}</Tooltip>
-  ) : field.label;
+  const labelWithTooltip = (
+    <div className="flex items-center gap-1.5 mb-2">
+      <label className="text-xs font-semibold text-gray-500 uppercase tracking-wider">{field.label}</label>
+      {field.tooltip && (
+        <Tooltip text={field.tooltip}>
+          <Info size={14} className="text-[#6B6B6B] cursor-help hover:text-[#E10600] transition-all duration-300 ease-in-out" />
+        </Tooltip>
+      )}
+    </div>
+  );
+
+  const inputClasses = `w-full px-4 py-3 rounded-xl border border-gray-200 bg-white text-gray-900 placeholder-gray-400
+focus:outline-none focus:ring-2 focus:ring-red-500/20 focus:border-red-500
+hover:border-gray-400 transition-all duration-200
+${error ? 'border-red-500 bg-red-50 placeholder:text-red-300' : ''}`;
 
   if (field.type === "select") {
     return (
-      <div className="form-group">
-        <label className="form-label">{labelWithTooltip}</label>
-        <div className="select-wrap">
-          <select name={field.key} value={value} onChange={onChange} className={`form-select ${error ? 'error' : ''}`}>
+      <div className="flex flex-col group">
+        {labelWithTooltip}
+        <div className="relative">
+          <select 
+            name={field.key} 
+            value={value} 
+            onChange={onChange} 
+            className={`${inputClasses} appearance-none cursor-pointer`}
+          >
             {field.options.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
           </select>
-          <span className="select-arrow">▾</span>
+          <div className="absolute right-4 top-1/2 -translate-y-1/2 pointer-events-none text-gray-400 group-focus-within:text-red-500 transition-all duration-200">
+            <Loader2 size={16} className="animate-none" />
+          </div>
         </div>
       </div>
     );
   }
   return (
-    <div className="form-group">
-      <label className="form-label">{labelWithTooltip}</label>
-      <input type="number" name={field.key} value={value} onChange={onChange} placeholder={field.placeholder} className={`form-input ${error ? 'error' : ''}`} step="any" min={field.min} max={field.max} />
-      {error ? <span className="form-error-text">{error}</span> : field.hint && <span className="form-hint">{field.hint}</span>}
+    <div className="flex flex-col">
+      {labelWithTooltip}
+      <input 
+        type="number" 
+        name={field.key} 
+        value={value} 
+        onChange={onChange} 
+        placeholder={field.placeholder} 
+        className={inputClasses}
+        step="any" 
+        min={field.min} 
+        max={field.max} 
+      />
+      {error ? (
+        <span className="text-[10px] font-bold text-red-500 mt-1.5 uppercase ml-1 tracking-tight">{error}</span>
+      ) : field.hint && (
+        <span className="text-[10px] font-medium text-[#6B6B6B] mt-1.5 uppercase ml-1 tracking-tight">{field.hint}</span>
+      )}
     </div>
-  );
-}
-
-function SkeletonLoading() {
-  return (
-    <motion.div 
-      className="skeleton-card"
-      initial={{ opacity: 0, y: 20 }}
-      animate={{ opacity: 1, y: 0 }}
-      exit={{ opacity: 0, y: -20 }}
-      transition={{ duration: 0.4 }}
-    >
-      <div className="skeleton-shimmer sk-icon" />
-      <div className="skeleton-shimmer sk-title" />
-      <div className="skeleton-shimmer sk-text" />
-      <div className="skeleton-shimmer sk-text short" />
-      <div className="skeleton-shimmer sk-progress" />
-      <div className="skeleton-shimmer sk-text" />
-      <div className="skeleton-shimmer sk-text short" />
-    </motion.div>
   );
 }
 
@@ -87,25 +98,15 @@ export default function Predict({ result, setResult, formData: sharedData, setFo
   const [errors, setErrors]     = useState({});
   const [loading, setLoading]   = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
-  const formRef = React.useRef(null);
   const navigate = useNavigate();
-
-  React.useEffect(() => {
-    if (formRef.current) {
-      gsap.fromTo(formRef.current.querySelectorAll('.form-group'),
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.05, ease: "power2.out" }
-      );
-    }
-  }, []);
 
   const validateField = (name, value) => {
     const field = FIELDS.find(f => f.key === name);
     if (!field || field.type !== "number") return null;
     if (value === "") return null;
     const num = Number(value);
-    if (field.min !== undefined && num < field.min) return `${field.label} must be at least ${field.min}`;
-    if (field.max !== undefined && num > field.max) return `${field.label} must be at most ${field.max}`;
+    if (field.min !== undefined && num < field.min) return `Min: ${field.min}`;
+    if (field.max !== undefined && num > field.max) return `Max: ${field.max}`;
     return null;
   };
 
@@ -137,13 +138,16 @@ export default function Predict({ result, setResult, formData: sharedData, setFo
       const payload = {};
       FIELDS.forEach(f => payload[f.key] = Number(formData[f.key]));
       
-      const res = await fetch("https://cardiopredict-bbzb.onrender.com/predict/", {
+      const res = await fetch("https://cardiopredict-bbzb.onrender.com/predict", {
         method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(payload),
       });
+      
+      if (!res.ok) throw new Error("Server error");
+      
       const data = await res.json();
       
       const elapsed = Date.now() - startTime;
-      const remaining = Math.max(0, 1200 - elapsed);
+      const remaining = Math.max(0, 1500 - elapsed);
       await new Promise(r => setTimeout(r, remaining));
 
       setSharedData(formData);
@@ -158,57 +162,107 @@ export default function Predict({ result, setResult, formData: sharedData, setFo
   };
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.3, ease: "easeOut" }} style={{ width: '100%' }}>
-      <section id="predict" className="section form-section" style={{ paddingTop: '40px' }}>
-        <Link to="/" style={{ textDecoration: 'none', color: 'var(--text-3)', fontSize: '14px', margin: '0 0 25px 0', alignSelf: 'flex-start', display: 'inline-block', fontWeight: 600 }}>← Back to Home</Link>
-        <h2 className="section-title" style={{ width: '100%', textAlign: 'left', marginBottom: '24px' }}>Enter Patient Details</h2>
-        
-        <div className="glass-card" style={{ marginBottom: loading ? '60px' : '0' }}>
-          <form onSubmit={handleSubmit}>
-            <div className="form-body">
-              <div ref={formRef} className="form-grid">
-                {FIELDS.map((field) => <FormField key={field.key} field={field} value={formData[field.key]} onChange={handleChange} error={errors[field.key]} />)}
-              </div>
-              <button type="submit" className="submit-btn" disabled={loading || !isFormValid} style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '8px' }}>
-                {loading && <Loader2 className="animate-spin" size={18} />}
-                {loading ? "Analyzing..." : "Generate Prediction"}
-              </button>
-            </div>
-          </form>
-        </div>
-        
-        <div className="medical-disclaimer" style={{ marginTop: '30px', textAlign: 'center', fontSize: '13px', color: 'var(--text-3)', padding: '0 20px' }}>
-          ⚠️ This application is for educational purposes only. The results are not guaranteed and should not be used for medical diagnosis. Always consult a qualified doctor.
-        </div>
-      </section>
+    <motion.div 
+      initial={{ opacity: 0 }} 
+      animate={{ opacity: 1 }} 
+      transition={{ duration: 0.55, ease: [0.25, 0.1, 0.25, 1] }} 
+      className="w-full max-w-[1200px] mx-auto px-6 py-12"
+    >
+      <Link 
+        to="/" 
+        className="inline-flex items-center gap-2 text-[#6B6B6B] font-semibold text-xs uppercase tracking-widest hover:text-black transition-all duration-300 ease-in-out mb-10 group"
+      >
+        <ArrowLeft size={16} className="group-hover:-translate-x-1 transition-transform duration-300" />
+        Back to Home
+      </Link>
 
-      {/* Error Toast */}
+      <div className="mb-12 pb-10 border-b border-[#E5E5E5]">
+        <p className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#6B6B6B] mb-4">Clinical intake</p>
+        <h2 className="text-4xl md:text-5xl font-black text-black tracking-tight mb-4">
+          Patient analysis
+        </h2>
+        <p className="text-[#6B6B6B] font-medium max-w-lg leading-relaxed">
+          Complete all fields to generate a risk estimate. All inputs are required.
+        </p>
+      </div>
+      
+      <div className="mb-16">
+        <form onSubmit={handleSubmit}>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {FIELDS.map((field) => (
+              <FormField 
+                key={field.key} 
+                field={field} 
+                value={formData[field.key]} 
+                onChange={handleChange} 
+                error={errors[field.key]} 
+              />
+            ))}
+          </div>
+
+          <div className="mt-14 flex flex-col items-stretch max-w-2xl mx-auto w-full">
+            <button 
+              type="submit" 
+              className="w-full flex items-center justify-center gap-3 bg-[#E10600] text-white px-8 py-4 rounded-xl font-semibold text-xs uppercase tracking-widest transition-all duration-300 ease-in-out hover:bg-[#c70500] hover:scale-105 active:scale-100 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100 disabled:hover:bg-[#E10600]" 
+              disabled={loading || !isFormValid}
+            >
+              {loading ? (
+                <>
+                  <Loader2 className="animate-spin" size={20} />
+                  Analyzing Patient Data...
+                </>
+              ) : (
+                <>
+                  Generate Intelligence Report
+                  <ArrowRight size={20} />
+                </>
+              )}
+            </button>
+            
+            <p className="mt-4 text-center text-[10px] font-medium text-[#6B6B6B] uppercase tracking-widest">
+              All fields required
+            </p>
+          </div>
+        </form>
+      </div>
+
+      <p className="max-w-2xl mx-auto text-center text-xs text-[#6B6B6B] leading-relaxed px-4">
+        This application is for educational purposes only. Results may not be accurate. Consult a medical professional.
+      </p>
+
       <AnimatePresence>
         {errorMsg && (
           <motion.div 
-            className="error-toast"
-            initial={{ opacity: 0, y: 50, x: '-50%' }}
-            animate={{ opacity: 1, y: 0, x: '-50%' }}
-            exit={{ opacity: 0, y: 50, x: '-50%' }}
+            className="fixed bottom-8 left-1/2 z-[100] flex items-center gap-3 px-5 py-3 rounded-md bg-white border border-[#E5E5E5] text-black -translate-x-1/2 transition-all duration-300 ease-in-out"
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            exit={{ opacity: 0 }}
           >
-            <AlertCircle size={18} />
-            {errorMsg}
+            <AlertCircle size={18} className="text-red-500" />
+            <span className="font-bold text-sm">{errorMsg}</span>
           </motion.div>
         )}
       </AnimatePresence>
-
-      <AnimatePresence mode="wait">
-        {loading && (
-          <motion.section 
-            key="loading" 
-            className="section"
-            initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -20 }} transition={{ duration: 0.3 }}
-            style={{ paddingBottom: '100px' }}
-          >
-            <SkeletonLoading />
-          </motion.section>
-        )}
-      </AnimatePresence>
     </motion.div>
+  );
+}
+
+function ArrowRight({ size, className }) {
+  return (
+    <svg 
+      xmlns="http://www.w3.org/2000/svg" 
+      width={size} 
+      height={size} 
+      viewBox="0 0 24 24" 
+      fill="none" 
+      stroke="currentColor" 
+      strokeWidth="3" 
+      strokeLinecap="round" 
+      strokeLinejoin="round" 
+      className={className}
+    >
+      <line x1="5" y1="12" x2="19" y2="12"></line>
+      <polyline points="12 5 19 12 12 19"></polyline>
+    </svg>
   );
 }

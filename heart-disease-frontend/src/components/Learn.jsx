@@ -1,67 +1,114 @@
 import React from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-
-import gsap from 'gsap';
+import { ArrowLeft, BookOpen, Cpu, Database, ShieldAlert } from 'lucide-react';
 
 export default function Learn() {
-  const contentRef = React.useRef(null);
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: {
+      opacity: 1,
+      transition: { duration: 0.35, staggerChildren: 0.06 },
+    },
+  };
 
-  React.useEffect(() => {
-    if (contentRef.current) {
-      gsap.fromTo(contentRef.current.children,
-        { opacity: 0, y: 20 },
-        { opacity: 1, y: 0, duration: 0.6, stagger: 0.1, ease: "power3.out", delay: 0.1 }
-      );
-    }
-  }, []);
+  const itemVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 },
+  };
 
   return (
-    <motion.div className="section form-section" style={{ alignItems: 'flex-start', paddingTop: '40px', width: '100%' }}
-      initial={{ opacity: 0 }}
-      animate={{ opacity: 1 }}
-      transition={{ duration: 0.3, ease: "easeOut" }}
+    <motion.div
+      variants={containerVariants}
+      initial="hidden"
+      animate="visible"
+      className="w-full max-w-5xl px-4 py-12"
     >
-      <Link to="/" style={{ textDecoration: 'none', color: 'var(--text-3)', fontSize: '14px', marginBottom: '25px', display: 'inline-block', fontWeight: 600 }}>← Back to Home</Link>
-      <h2 className="section-title" style={{ width: '100%', textAlign: 'left', marginBottom: '10px' }}>Learn More</h2>
-      <p style={{ color: 'var(--text-3)', marginBottom: '30px', fontSize: '15px' }}>Understanding heart disease predictions, features, and functionality.</p>
-      <div className="divider" />
-      
-      <div ref={contentRef} className="glass-card" style={{ padding: '40px 48px', width: '100%', display: 'flex', flexDirection: 'column', gap: '30px', textAlign: 'left' }}>
-        
-        <div id="about">
-          <h3 style={{ color: 'var(--text-1)', fontSize: '18px', marginBottom: '10px' }}>A. About the Project</h3>
-          <p style={{ color: 'var(--text-2)', fontSize: '14.5px', lineHeight: 1.6 }}>
-            Heart disease is the leading cause of death globally. Early detection of cardiovascular markers significantly saves lives and improves treatment outcomes. This system helps assess underlying risks using machine learning based on a patient's clinical markers.
-          </p>
-        </div>
+      <Link
+        to="/"
+        className="inline-flex items-center gap-2 text-muted font-semibold text-xs uppercase tracking-widest hover:text-ink transition-colors mb-10 group"
+      >
+        <ArrowLeft size={16} strokeWidth={2} className="group-hover:-translate-x-0.5 transition-transform" />
+        Back to home
+      </Link>
 
-        <div id="how-it-works">
-          <h3 style={{ color: 'var(--text-1)', fontSize: '18px', marginBottom: '10px' }}>B. How This App Works</h3>
-          <p style={{ color: 'var(--text-2)', fontSize: '14.5px', lineHeight: 1.6 }}>
-            The app collects 11 specific clinical diagnostic features securely on the frontend. The data is processed by a FastAPI backend using a pre-trained ML classifier (like Random Forest or XGBoost) to predict the probability of heart disease presence. It also extracts feature importance to show which conditions had the biggest impact on the final decision.
-          </p>
-        </div>
+      <div className="mb-12 pb-10 border-b border-line">
+        <h2 className="text-4xl md:text-5xl font-black text-ink tracking-tight mb-4 flex flex-wrap items-center gap-3">
+          <BookOpen className="text-accent" size={32} strokeWidth={2} />
+          Knowledge base
+        </h2>
+        <p className="text-muted font-medium max-w-lg leading-relaxed">
+          How CardioPredict uses clinical parameters and what the model is doing under the hood.
+        </p>
+      </div>
 
-        <div id="input-guide">
-          <h3 style={{ color: 'var(--text-1)', fontSize: '18px', marginBottom: '10px' }}>C. Input Glossary</h3>
-          <ul style={{ color: 'var(--text-2)', fontSize: '14.5px', lineHeight: 1.7, paddingLeft: '20px' }}>
-            <li><strong>Age:</strong> The patient's biological age in years.</li>
-            <li><strong>RestingBP:</strong> Resting blood pressure measured in mm Hg upon hospital admission.</li>
-            <li><strong>Cholesterol:</strong> Serum cholesterol in mg/dl. High cholesterol increases heart risk.</li>
-            <li><strong>FastingBS:</strong> Fasting blood sugar level. 1 = &gt;120 mg/dl; 0 = otherwise.</li>
-            <li><strong>MaxHR:</strong> Maximum heart rate achieved during physical stress or test.</li>
-            <li><strong>ChestPainType:</strong> Type of chest pain (Angina, Atypical, Non-Anginal, Asymptomatic).</li>
-            <li><strong>ST Depression (Oldpeak):</strong> Depression in the ST segment of an ECG induced by exercise.</li>
-          </ul>
-        </div>
-        
-        <div id="privacy" style={{ borderTop: '1px solid var(--border)', paddingTop: '20px', marginTop: '10px' }}>
-          <p style={{ color: 'var(--text-3)', fontSize: '12.5px', fontWeight: 600 }}>⚠️ DISCLAIMER: This tool is for educational and demonstrative purposes only.</p>
-          <p id="terms" style={{ color: 'var(--text-3)', fontSize: '12.5px', fontWeight: 600, marginTop: '8px' }}>By using this app, you agree to these terms of service and our data privacy structure.</p>
-        </div>
+      <div className="grid gap-10">
+        <motion.div variants={itemVariants} className="border border-line bg-white p-8 md:p-10">
+          <div className="flex items-start gap-6">
+            <div className="w-11 h-11 border border-line flex items-center justify-center shrink-0 font-black text-accent">
+              01
+            </div>
+            <div>
+              <h3 className="text-sm font-black text-ink mb-4 uppercase tracking-widest">Medical context</h3>
+              <p className="text-muted leading-relaxed font-medium">
+                Cardiovascular disease is a leading cause of mortality worldwide. Early risk awareness supports better conversations with clinicians. CardioPredict summarizes standard markers to produce a probability estimate—not a diagnosis.
+              </p>
+            </div>
+          </div>
+        </motion.div>
 
+        <motion.div variants={itemVariants} className="border border-line bg-white p-8 md:p-10">
+          <div className="flex items-start gap-6">
+            <div className="w-11 h-11 border border-line flex items-center justify-center shrink-0">
+              <Cpu className="text-accent" size={22} strokeWidth={2} />
+            </div>
+            <div>
+              <h3 className="text-sm font-black text-ink mb-4 uppercase tracking-widest">Algorithmic engine</h3>
+              <p className="text-muted leading-relaxed font-medium">
+                The backend accepts eleven numeric inputs via a FastAPI service. A trained classifier estimates disease probability and reports feature importance so you can see what drove the score.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="border border-line bg-white p-8 md:p-10">
+          <div className="flex items-start gap-6">
+            <div className="w-11 h-11 border border-line flex items-center justify-center shrink-0">
+              <Database className="text-accent" size={22} strokeWidth={2} />
+            </div>
+            <div className="min-w-0">
+              <h3 className="text-sm font-black text-ink mb-4 uppercase tracking-widest">Input glossary</h3>
+              <div className="grid sm:grid-cols-2 gap-x-12 gap-y-6 mt-2">
+                <GlossaryItem label="Age" desc="Biological age in years (1–120)." />
+                <GlossaryItem label="RestingBP" desc="Blood pressure in mm Hg at rest." />
+                <GlossaryItem label="Cholesterol" desc="Serum cholesterol in mg/dl." />
+                <GlossaryItem label="FastingBS" desc="Fasting blood sugar above 120 mg/dl (1: yes, 0: no)." />
+                <GlossaryItem label="MaxHR" desc="Maximum heart rate achieved in testing." />
+                <GlossaryItem label="ST slope" desc="ST segment slope on exercise ECG." />
+              </div>
+            </div>
+          </div>
+        </motion.div>
+
+        <motion.div variants={itemVariants} className="border border-line bg-cream px-8 py-8 flex gap-4 items-start">
+          <ShieldAlert size={20} className="text-muted mt-0.5 shrink-0" strokeWidth={2} />
+          <div>
+            <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] mb-2 text-muted">Disclaimer</h4>
+            <p className="text-xs font-medium text-muted leading-relaxed">
+              CardioPredict is a demonstration built on public datasets. It is not a clinical diagnostic. Results are probabilistic and must not replace professional medical advice.
+            </p>
+          </div>
+        </motion.div>
       </div>
     </motion.div>
+  );
+}
+
+function GlossaryItem({ label, desc }) {
+  return (
+    <div className="flex flex-col border-l-2 border-line pl-4 py-1 hover:border-accent transition-colors">
+      <span className="text-[10px] font-semibold uppercase tracking-widest text-accent mb-1">{label}</span>
+      <p className="text-xs font-medium text-muted leading-snug">{desc}</p>
+    </div>
   );
 }

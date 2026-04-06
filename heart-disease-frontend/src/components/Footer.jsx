@@ -1,97 +1,106 @@
 import React from 'react';
-import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
+import { ArrowUp } from 'lucide-react';
 
-const container = {
-  hidden: { opacity: 0 },
-  show: {
-    opacity: 1,
-    transition: { staggerChildren: 0.15 }
-  }
-};
+function IconGithub({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M12 0C5.37 0 0 5.37 0 12c0 5.31 3.435 9.795 8.205 11.385.6.105.825-.255.825-.57 0-.285-.015-1.23-.015-2.235-3.015.555-3.795-.735-4.035-1.41-.135-.345-.72-1.41-1.23-1.695-.42-.225-1.02-.78-.015-.795.945-.015 1.62.87 1.845 1.23 1.08 1.815 2.805 1.305 3.495.99.105-.78.42-1.305.765-1.605-2.67-.3-5.46-1.335-5.46-5.925 0-1.305.465-2.385 1.23-3.225-.12-.3-.54-1.53.12-3.18 0 0 1.005-.315 3.3 1.23.96-.27 1.98-.405 3-.405s2.04.135 3 .405c2.295-1.56 3.3-1.23 3.3-1.23.66 1.65.24 2.88.12 3.18.765.84 1.23 1.905 1.23 3.225 0 4.605-2.805 5.625-5.475 5.925.435.375.81 1.095.81 2.22 0 1.605-.015 2.895-.015 3.3 0 .315.225.69.825.57A12.02 12.02 0 0024 12c0-6.63-5.37-12-12-12z" />
+    </svg>
+  );
+}
 
-const item = {
-  hidden: { opacity: 0, y: 20 },
-  show: { opacity: 1, y: 0, transition: { duration: 0.6, ease: "easeOut" } }
-};
+function IconLinkedin({ className }) {
+  return (
+    <svg className={className} viewBox="0 0 24 24" fill="currentColor" aria-hidden>
+      <path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z" />
+    </svg>
+  );
+}
 
 export default function Footer() {
   const scrollToTop = () => {
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const iconBtn =
+    'inline-flex items-center justify-center w-11 h-11 border border-[#E5E5E5] bg-white text-[#6B6B6B] transition-all duration-300 ease-out hover:scale-110 hover:bg-[#E10600] hover:text-white hover:border-[#E10600]';
+
   return (
-    <footer className="footer-glass">
-      <div className="footer-inner-glass">
-        <motion.div 
-          className="footer-grid"
-          variants={container}
-          initial="hidden"
-          whileInView="show"
-          viewport={{ once: true, amount: 0.2 }}
-        >
-          {/* Column 1: Brand */}
-          <motion.div variants={item} className="footer-col">
-            <Link to="/" className="footer-brand">
-              <span className="footer-brand-text">CardioPredict ❤️</span>
+    <footer className="w-full border-t border-[#E5E5E5] bg-white mt-20">
+      <div className="max-w-[1200px] mx-auto px-6 py-14">
+        <p className="text-center text-xs text-[#6B6B6B] max-w-2xl mx-auto leading-relaxed mb-14">
+          This application is for educational purposes only. Results may not be accurate. Consult a medical professional.
+        </p>
+
+        <div className="flex flex-col md:flex-row md:justify-between gap-12 mb-14 items-start">
+          <div className="flex flex-col gap-4">
+            <Link to="/" className="font-black text-xl text-black tracking-tight w-fit transition-all duration-300 ease-in-out hover:text-[#E10600]">
+              CardioPredict
             </Link>
-            <p className="footer-tagline">
-              AI-powered cardiac risk prediction for smarter healthcare decisions.
+            <p className="text-sm font-medium text-[#6B6B6B] leading-relaxed max-w-xs">
+              Cardiovascular risk screening from standard clinical inputs—clear, fast, and structured.
             </p>
-          </motion.div>
+          </div>
 
-          {/* Column 2: Navigation */}
-          <motion.div variants={item} className="footer-col">
-            <h4 className="footer-col-title">Navigation</h4>
-            <div className="footer-links">
-              <Link to="/" className="footer-link">Home</Link>
-              <Link to="/predict" className="footer-link">Predict</Link>
-              <Link to="/learn" className="footer-link">Learn</Link>
+          {/* Navigation + Connect wrapper */}
+          <div className="flex gap-16 md:ml-auto">
+            <div className="md:flex md:flex-col md:items-start md:text-left">
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#6B6B6B] mb-5">Navigation</h4>
+              <div className="flex flex-col gap-3 md:items-start">
+                <Link to="/" className="text-sm font-medium text-black/80 hover:text-[#E10600] transition-all duration-300 ease-in-out">
+                  Home
+                </Link>
+                <Link to="/predict" className="text-sm font-medium text-black/80 hover:text-[#E10600] transition-all duration-300 ease-in-out">
+                  Predict
+                </Link>
+                <Link to="/learn" className="text-sm font-medium text-black/80 hover:text-[#E10600] transition-all duration-300 ease-in-out">
+                  How it works
+                </Link>
+                <Link to="/dashboard" className="text-sm font-medium text-black/80 hover:text-[#E10600] transition-all duration-300 ease-in-out">
+                  Dashboard
+                </Link>
+              </div>
             </div>
-          </motion.div>
-
-          {/* Column 3: Resources */}
-          <motion.div variants={item} className="footer-col">
-            <h4 className="footer-col-title">Resources</h4>
-            <div className="footer-links">
-              <Link to="/learn" className="footer-link">About the Project</Link>
-              <Link to="/learn" className="footer-link">How it Works</Link>
-              <Link to="/learn" className="footer-link">Input Guide</Link>
-              <a href="#privacy" className="footer-link">Privacy Policy</a>
-              <a href="#terms" className="footer-link">Terms of Service</a>
+            <div className="flex flex-col">
+              <h4 className="text-[10px] font-semibold uppercase tracking-[0.2em] text-[#6B6B6B] mb-5">Connect</h4>
+              <div className="flex items-center gap-3">
+                <a
+                  href="https://github.com/bishnu-prasad"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={iconBtn}
+                  aria-label="GitHub"
+                >
+                  <IconGithub className="w-5 h-5" />
+                </a>
+                <a
+                  href="https://linkedin.com/in/bishnuprasad-tripathy"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className={iconBtn}
+                  aria-label="LinkedIn"
+                >
+                  <IconLinkedin className="w-5 h-5" />
+                </a>
+              </div>
             </div>
-          </motion.div>
+          </div>
+        </div>
 
-          {/* Column 4: Contact & Socials */}
-          <motion.div variants={item} className="footer-col">
-            <h4 className="footer-col-title">Connect</h4>
-            <div className="footer-socials">
-              <a href="https://github.com/bishnu-prasad" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="GitHub">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
-              </a>
-              <a href="https://www.linkedin.com/in/bishnuprasad-tripathy" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="LinkedIn">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
-              </a>
-              <a href="mailto:your-email@example.com" target="_blank" rel="noopener noreferrer" className="social-icon" aria-label="Email">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-              </a>
-            </div>
-          </motion.div>
-        </motion.div>
-
-        {/* Bottom Bar */}
-        <motion.div 
-          className="footer-bottom"
-          initial={{ opacity: 0 }}
-          whileInView={{ opacity: 1 }}
-          viewport={{ once: true }}
-          transition={{ delay: 0.6, duration: 0.8 }}
-        >
-          <span className="footer-copy">© 2026 CardioPredict. All rights reserved.</span>
-          <button className="back-to-top" onClick={scrollToTop}>
-            ↑ Back to Top
+        <div className="pt-8 border-t border-[#E5E5E5] flex flex-col md:flex-row justify-between items-center gap-6">
+          <span className="text-[10px] font-semibold uppercase tracking-widest text-[#6B6B6B] text-center md:text-left">
+            © 2026 CardioPredict. Educational use only.
+          </span>
+          <button
+            type="button"
+            onClick={scrollToTop}
+            className="flex items-center gap-2 text-[10px] font-semibold uppercase tracking-widest text-[#6B6B6B] hover:text-black transition-all duration-300 ease-in-out"
+          >
+            Back to top
+            <ArrowUp size={14} strokeWidth={2} />
           </button>
-        </motion.div>
+        </div>
       </div>
     </footer>
   );
