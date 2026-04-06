@@ -6,7 +6,7 @@ app = FastAPI(title="Heart Disease Prediction API")
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["https://cardio-predict-ten.vercel.app"],
+    allow_origins=["http://localhost:3000", "https://cardio-predict-ten.vercel.app"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
@@ -17,4 +17,4 @@ app.include_router(predict.router)
 
 @app.get("/")
 def root():
-    return {"message": "API is running 🚀"}
+    return {"message": "API is running "}
