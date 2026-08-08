@@ -1,3 +1,17 @@
+<img width="1470" height="956" alt="Screenshot 2026-08-08 at 4 32 39 PM" src="https://github.com/user-attachments/assets/adc88ecc-d854-488b-a022-99dd124002e5" />
+<img width="1470" height="956" alt="Screenshot 2026-08-08 at 4 32 56 PM" src="https://github.com/user-attachments/assets/031be651-01c3-425b-9ff4-cbaf2de107bc" />
+<img width="1470" height="956" alt="Screenshot 2026-08-08 at 4 36 19 PM" src="https://github.com/user-attachments/assets/5a7435d1-089d-45ff-83a3-8e7e59a41e0c" />
+<img width="1470" height="956" alt="Screenshot 2026-08-08 at 4 36 51 PM" src="https://github.com/user-attachments/assets/d4dda31f-56ff-4e3f-9236-c162e8b4922c" />
+<img width="1470" height="956" alt="Screenshot 2026-08-08 at 4 37 14 PM" src="https://github.com/user-attachments/assets/22ac370e-cf58-4559-8221-cd68c1c87d02" />
+<img width="1470" height="956" alt="Screenshot 2026-08-08 at 4 37 34 PM" src="https://github.com/user-attachments/assets/aff7f229-ceb0-4f9f-9ab1-f3330fbf6ad2" />
+
+
+
+
+
+
+
+
 # ❤️ CardioPredict
 
 ### AI-Assisted Heart Disease Risk Prediction Platform
